@@ -1,0 +1,40 @@
+@model TaskManagerApp.Models.Task
+
+<div class="container mt-5">
+    <h2 class="mb-4">Create New Task</h2>
+    <div class="card p-4 shadow-sm">
+        <form asp-action="Create" method="post" novalidate>
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label">Task Title</label>
+                <input asp-for="Title" class="form-control @(!ViewData.ModelState.IsValid ? "is-invalid" : "")" placeholder="Enter task title" />
+                <span asp-validation-for="Title" class="invalid-feedback"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">Description</label>
+                <textarea asp-for="Description" class="form-control @(!ViewData.ModelState.IsValid ? "is-invalid" : "")" rows="4" placeholder="Describe the task"></textarea>
+                <span asp-validation-for="Description" class="invalid-feedback"></span>
+            </div>
+            <div class="form-group">
+                <label for="Priority">Priority</label>
+                <select asp-for="Priority" class="form-control">
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+                <span asp-validation-for="Priority" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DueDate" class="form-label">Due Date</label>
+                <input asp-for="DueDate" type="date" class="form-control @(!ViewData.ModelState.IsValid ? "is-invalid" : "")" />
+                <span asp-validation-for="DueDate" class="invalid-feedback"></span>
+            </div>
+            <div class="form-check mb-4">
+                <input asp-for="IsCompleted" class="form-check-input" id="isCompletedCheckbox" />
+                <label asp-for="IsCompleted" class="form-check-label" for="isCompletedCheckbox">Mark as Completed</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Task</button>
+            <a href="/Tasks" class="btn btn-secondary ms-2">Cancel</a>
+        </form>
+    </div>
+</div>

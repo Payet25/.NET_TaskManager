@@ -1,0 +1,117 @@
+@model IEnumerable<TaskManagerApp.Models.Task>
+
+@{
+    // Ensure Model is not null before using it
+    var overdueTasks = Model?.Where(t => t.DueDate < DateTime.Now && !t.IsCompleted) ?? Enumerable.Empty<TaskManagerApp.Models.Task>();
+    var dueSoonTasks = Model?.Where(t => t.DueDate >= DateTime.Now && t.DueDate <= DateTime.Now.AddDays(3) && !t.IsCompleted) ?? Enumerable.Empty<TaskManagerApp.Models.Task>();
+}
+
+<div class="alert alert-danger" role="alert" style="display: @(overdueTasks.Any() ? "block" : "none")">
+    You have @overdueTasks.Count() overdue task(s)!
+</div>
+<div class="alert alert-warning" role="alert" style="display: @(dueSoonTasks.Any() ? "block" : "none")">
+    You have @dueSoonTasks.Count() task(s) due soon.
+</div>
+
+<!-- Rest of your HTML code -->
+
+<div class="row" id="taskList">
+    @if (Model != null)
+    {
+        foreach (var task in Model)
+        {
+            <div class="col-md-4 mb-4 task-card" data-status="@((task.IsCompleted ? "completed" : "pending"))">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@task.Title</h5>
+                        <p class="card-text">@task.Description</p>
+                        <p class="text-muted small">Due Date:
+                            <span class="@((task.DueDate < DateTime.Now && !task.IsCompleted) ? "text-danger" : (task.DueDate < DateTime.Now.AddDays(3) ? "due-soon" : "on-time"))">
+                                @task.DueDate.ToShortDateString()
+                            </span>
+                            <span class="badge @((task.Priority == "High" ? "bg-danger" : (task.Priority == "Medium" ? "bg-warning" : "bg-info")))">
+                                @task.Priority
+                            </span>
+                        </p>
+
+                        <span class="badge @((task.IsCompleted) ? "bg-success" : "bg-warning")">
+                            @(task.IsCompleted ? "Completed" : "Pending")
+                        </span>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a href="/Tasks/Edit/@task.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                        <a href="#" class="btn btn-sm btn-outline-danger" onclick="confirmDelete(@task.Id)">Delete</a>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No tasks available.</p>
+    }
+</div>
+
+<!-- Rest of your code continues... -->
+<div class="row" id="taskList">
+    @foreach (var task in Model)
+    {
+        <div class="col-md-4 mb-4 task-card" data-status="@((task.IsCompleted ? "completed" : "pending"))">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <input type="checkbox" class="task-completion-toggle" data-task-id="@task.Id" 
+                               @(task.IsCompleted ? "checked" : "") />
+                        @task.Title
+                    </h5>
+                    <p class="card-text">@task.Description</p>
+                    <!-- Priority and Due Date Display -->
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<script>
+    document.querySelectorAll('.task-completion-toggle').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const taskId = this.getAttribute('data-task-id');
+            fetch(`/Tasks/ToggleCompletion?id=${taskId}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        this.checked = data.isCompleted;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    });
+</script>
+
+<label for="sortOrder" class="form-label">Sort By:</label>
+<select id="sortOrder" class="form-select w-25" onchange="window.location.href = '/Tasks?sortOrder=' + this.value">
+    <option value="">Title</option>
+    @{
+    string selectedSortOrder = ViewBag.SortOrder;
+}
+
+<option value="priority" selected="@(selectedSortOrder == "priority")">Priority</option>
+<option value="dueDate" selected="@(selectedSortOrder == "dueDate")">Due Date</option>
+
+</select>
+
+<div class="btn-group mb-4">
+    <button class="btn btn-outline-primary" onclick="filterByStatus('all')">All</button>
+    <button class="btn btn-outline-success" onclick="filterByStatus('completed')">Completed</button>
+    <button class="btn btn-outline-warning" onclick="filterByStatus('pending')">Pending</button>
+</div>
+
+<script>
+    function filterByStatus(status) {
+        const tasks = document.querySelectorAll('.task-card');
+        tasks.forEach(task => {
+            const taskStatus = task.getAttribute('data-status');
+            task.style.display = (status === 'all' || taskStatus === status) ? 'block' : 'none';
+        });
+    }
+</script>

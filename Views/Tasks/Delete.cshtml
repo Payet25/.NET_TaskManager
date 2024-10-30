@@ -1,0 +1,21 @@
+@model TaskManagerApp.Models.Task
+
+<div class="card p-4 my-4">
+    <h2>Delete Task</h2>
+    <p>Are you sure you want to delete this task?</p>
+    <dl class="row">
+        <dt class="col-sm-3">Title</dt>
+        <dd class="col-sm-9">@Model.Title</dd>
+
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
+
+        <dt class="col-sm-3">Due Date</dt>
+        <dd class="col-sm-9">@Model.DueDate.ToShortDateString()</dd>
+    </dl>
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+        <a href="/Tasks" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

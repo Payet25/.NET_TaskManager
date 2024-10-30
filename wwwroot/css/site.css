@@ -1,0 +1,137 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+/* Background and Card Styles */
+body {
+  margin-bottom: 60px;
+  background-color: #f4f5f7;
+}
+
+/* Smooth Transition on Task Card Hover */
+.task-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.task-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Fade-in Animation */
+.task-card {
+  opacity: 0;
+  animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+  to {
+      opacity: 1;
+  }
+}
+
+/* Navbar and Footer */
+.navbar-dark .navbar-brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.footer {
+  background-color: #333;
+  color: #ddd;
+  font-size: 0.9rem;
+}
+
+body {
+  background-color: #f8f9fa;
+}
+
+.task-card {
+  border-radius: 10px;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.task-card:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+  font-weight: bold;
+}
+
+.task-completion-toggle {
+  margin-right: 10px;
+}
+
+.progress-bar {
+  font-size: 0.85rem;
+}
+
+.badge {
+  font-size: 0.85rem;
+  padding: 0.5em 0.6em;
+}
+
+:root {
+  --bg-color: #f8f9fa;
+  --text-color: #212529;
+  --card-bg: #ffffff;
+}
+
+[data-theme="dark"] {
+  --bg-color: #343a40;
+  --text-color: #ffffff;
+  --card-bg: #495057;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.card {
+  background-color: var(--card-bg);
+}
+
+/* Center the container */
+.container {
+  max-width: 800px;
+  margin-top: 20px;
+}
+
+.card {
+  border: none;
+  border-radius: 8px;
+}
+
+/* Due Date Styles */
+.text-danger {
+  color: #dc3545 !important;
+  font-weight: bold;
+}
+.due-soon {
+  color: #ffc107 !important;
+  font-weight: bold;
+}
+.on-time {
+  color: #28a745 !important;
+  font-weight: bold;
+}
